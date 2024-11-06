@@ -33,8 +33,7 @@ class MyHomePage extends StatelessWidget {
         iconTheme: const IconThemeData(color: Colors.white),
       ),
       drawer: const LeftDrawer(),
-      // Body halaman dengan padding di sekelilingnya.
-      backgroundColor: Colors.white, // Tambahkan properti ini
+      // // Body halaman dengan padding di sekelilingnya.
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         // Menyusun widget secara vertikal dalam sebuah kolom.
