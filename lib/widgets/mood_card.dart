@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:mental_health_tracker/screens/moodentry_form.dart';
 import 'package:mental_health_tracker/screens/list_moodentry.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:provider/provider.dart'; // Ensure this import is correct
 import 'package:mental_health_tracker/screens/login.dart';
-
+import 'package:mental_health_tracker/screens/moodentry_form.dart';
+//import 'package:mental_health_tracker/screens/moodentry_page.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 
 class ItemHomepage {
   final String name;
@@ -32,51 +32,53 @@ class ItemCard extends StatelessWidget {
       child: InkWell(
         // Aksi ketika kartu ditekan.
         onTap: () async {
-          // Menampilkan pesan SnackBar saat kartu ditekan.
+          // Memunculkan SnackBar ketika diklik
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!"))
-            );
+            ..showSnackBar(SnackBar(
+                content: Text("Kamu telah menekan tombol ${item.name}!")));
+
+          // Navigate ke route yang sesuai (tergantung jenis tombol)
           if (item.name == "Tambah Mood") {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                builder: (context) => const MoodEntryFormPage()
-              ),
+              MaterialPageRoute(builder: (context) => MoodEntryFormPage()),
             );
-          } else if (item.name == "Lihat Mood") {
+          } 
+          // Tambahkan else if untuk tombol "Lihat Mood"
+          else if (item.name == "Lihat Mood") {
             Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const MoodEntryPage()
+                builder: (context) => const MoodEntryPage(),
               ),
             );
-          } else if (item.name == "Logout") {
-            final response = await request.logout(
-                // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
-                "http://127.0.0.1:8000/auth/logout/");
-            String message = response["message"];
-            if (context.mounted) {
-                if (response['status']) {
-                    String uname = response["username"];
-                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                        content: Text("$message Sampai jumpa, $uname."),
-                    ));
-                    Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => const LoginPage()),
-                    );
-                } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                            content: Text(message),
-                        ),
-                    );
-                }
-            }
           }
-        }, 
+          else if (item.name == "Logout") {
+              final response = await request.logout(
+                  // TODO: Ganti URL dan jangan lupa tambahkan trailing slash (/) di akhir URL!
+                  "http://127.0.0.1:8000/auth/logout/");
+              String message = response["message"];
+              if (context.mounted) {
+                  if (response['status']) {
+                      String uname = response["username"];
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text("$message Sampai jumpa, $uname."),
+                      ));
+                      Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                      );
+                  } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                              content: Text(message),
+                          ),
+                      );
+                  }
+              }
+          }
+        },
         // Container untuk menyimpan Icon dan Text
         child: Container(
           padding: const EdgeInsets.all(8),
